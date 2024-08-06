@@ -1,0 +1,72 @@
+header{
+    //background:#0B6E44 !important;
+    color:#A8CF45 !important;
+}
+.header{
+
+}
+
+a, NuxtLink{
+    color:#A8CF45 !important;
+}
+
+a:hover{
+    color:#0B6E44 !important;
+}
+h1,h2,h3,h6, em{
+    color:#0B6E44 !important;
+}
+
+.sub-menu, ul.sub-menu a{
+    background:#0B6E44 !important;
+    color:#A8CF45 !important;
+}
+
+.menu-icon{
+    background:#0B6E44 !important;
+    color:#A8CF45 !important;
+    /* border:7px solid #A8CF45 !important;   */
+}
+
+.menu-icon:hover{
+    background: #A8CF45 !important;
+    color:#0B6E44 !important;  
+}
+.nav-link{
+    color: #0B6E44 !important; 
+}
+
+.nav-link:hover, .nav-link:active, .nav-link:focus{
+    background: #0B6E44  !important;
+    color: #A8CF45 !important; 
+}
+.auth-header-box,.left-sidebar, .brand, .btn-dark{
+    background: rgba(4,43,27,1) !important;  
+    background:linear-gradient(90deg, rgba(4,43,27,1) 0%, rgba(11, 110, 68, 255) 100%) !important; 
+    color: #A8CF45 !important; 
+}
+.btn-primary{
+    background: rgba(4,43,27,1) !important;  
+    background:linear-gradient(90deg, rgba(4,43,27,1) 0%, rgba(11, 110, 68, 255) 100%) !important; 
+    color: #A8CF45 !important; 
+    border: 1px solid #0B6E44 !important;
+}
+
+.auth-page body {
+    background-image: url('assets/admin/images/p-1.png'); 
+    background-size: cover; 
+    background-position: center center;
+    
+}
+
+.logo-lg{
+ height: 45px !important;
+}
+
+.nav li.has-sub ul.sub-menu li:hover{
+    color:#fff !important;
+}
+
+span{
+    color:#A8CF45 !important;
+}
