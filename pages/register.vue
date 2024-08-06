@@ -14,26 +14,67 @@
                 <div class="card-body pt-0">
                   <form class="my-4" @submit.prevent="registerUser">
                     <div class="form-group mb-2">
-                      <label class="form-label" for="firstname">First Name</label>
-                      <input v-model="firstname" type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter Firstname" />
+                      <label class="form-label" for="firstname"
+                        >First Name</label
+                      >
+                      <input
+                        v-model="firstname"
+                        type="text"
+                        class="form-control"
+                        id="firstname"
+                        name="firstname"
+                        placeholder="Enter Firstname"
+                      />
                     </div>
 
                     <div class="form-group mb-2">
                       <label class="form-label" for="lastname">Last Name</label>
-                      <input v-model="lastname" type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter Lastname" />
+                      <input
+                        v-model="lastname"
+                        type="text"
+                        class="form-control"
+                        id="lastname"
+                        name="lastname"
+                        placeholder="Enter Lastname"
+                      />
                     </div>
 
                     <div class="form-group mb-2">
                       <label class="form-label" for="email">Email</label>
-                      <input v-model="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email" />
+                      <input
+                        v-model="email"
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter Email"
+                      />
                     </div>
                     <div class="form-group mb-2">
-                      <label class="form-label" for="userpassword">Password</label>
-                      <input v-model="password" type="password" class="form-control" name="password" id="password" placeholder="Enter Password" />
+                      <label class="form-label" for="userpassword"
+                        >Password</label
+                      >
+                      <input
+                        v-model="password"
+                        type="password"
+                        class="form-control"
+                        name="password"
+                        id="password"
+                        placeholder="Enter Password"
+                      />
                     </div>
                     <div class="form-group mb-2">
-                      <label class="form-label" for="password_confirmation">Confirm Password</label>
-                      <input v-model="password_confirmation" type="password" class="form-control" name="password_confirmation" id="password_confirmation" placeholder="Enter confirm password" />
+                      <label class="form-label" for="password_confirmation"
+                        >Confirm Password</label
+                      >
+                      <input
+                        v-model="password_confirmation"
+                        type="password"
+                        class="form-control"
+                        name="password_confirmation"
+                        id="password_confirmation"
+                        placeholder="Enter confirm password"
+                      />
                     </div>
 
                     <div class="form-group mb-0 row">
@@ -50,7 +91,9 @@
                   <div class="m-3 text-center text-muted">
                     <p class="mb-0">
                       Already have an account?
-                      <NuxtLink to="/login" class="text-primary ms-2">Log in</NuxtLink>
+                      <NuxtLink to="/login" class="text-primary ms-2"
+                        >Log in</NuxtLink
+                      >
                     </p>
                   </div>
                   <hr class="hr-dashed mt-4" />
@@ -86,40 +129,8 @@ useHead({
   ],
 });
 
-
-
 const config = useRuntimeConfig();
 const apiBase = config.public.apiBase;
-
-// const getCsrfToken = async () => {
-//   try {
-//     // Fetch CSRF token
-//     const csrfResponse = await $fetch(apiBase + "/sanctum/csrf-cookie", {
-//       credentials: 'include'
-//     });
-
-//     console.log("CSRF response obtained:", csrfResponse);
-
-//     // Assuming the token is in the csrfResponse.token
-//    const Token = csrfResponse.token;
-
-//     console.log("CSRF token value:", Token);
-//     return Token ;
-//   } catch (error) {
-//     console.error('Error fetching CSRF token:', error);
-//     return null;
-//   }
-// };
-
-// let csrfToken = await  getCsrfToken();
-//  if(csrfToken == null){
-//   console.log("Error fetching csrfToken");
-//  }else{
-//   console.log("csrfToken String obtained: " + csrfToken);
-//   //log the type also
-//   console.log(typeof csrfToken);
-//  }
-
 
 const firstname = ref("");
 const lastname = ref("");
@@ -128,14 +139,31 @@ const password = ref("");
 const password_confirmation = ref("");
 const router = useRouter();
 
+// Function to retrieve the CSRF token from cookies
+const getCsrfTokenFromCookies = () => {
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("XSRF-TOKEN="));
+  return token ? token.split("=")[1] : null;
+};
+
 const registerUser = async () => {
   try {
-    // Fetch CSRF token
-    const csrfResponse = await $fetch(apiBase + "/sanctum/csrf-cookie", {
-      credentials: 'include'
+    // Fetch CSRF token and set cookies
+    await $fetch(apiBase + "/sanctum/csrf-cookie", {
+      credentials: "include",
     });
+
+    // Retrieve CSRF token from cookies
+    const csrfToken = getCsrfTokenFromCookies();
+    if (!csrfToken) {
+      throw new Error("CSRF token not found in cookies");
+    }
+
+    console.log("CSRF Token:", csrfToken);
+
     const response = await $fetch(apiBase + "/register", {
-      method: 'POST',
+      method: "POST",
       body: {
         firstname: firstname.value,
         lastname: lastname.value,
@@ -146,15 +174,18 @@ const registerUser = async () => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "X-XSRF-TOKEN": csrfResponse.token,
+        "X-XSRF-TOKEN": csrfToken,
+        Referer: document.referrer,
       },
-      credentials: 'include'
+      credentials: "include",
     });
 
+    console.log("Registration Response:", response);
+
     alert("Registration successful");
-    console.log('fetched token:', csrfResponse.token)
     router.push("/login");
   } catch (error) {
+    console.error("Registration Error:", error);
     alert("Registration failed: " + error.message);
   }
 };
